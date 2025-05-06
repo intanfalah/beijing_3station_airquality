@@ -56,7 +56,10 @@ filtered_df = df[(df["station"].isin(selected_stations)) &
 # 1️⃣ Tren PM2.5
 st.subheader("📊 Tren Kualitas Udara per Stasiun (PM2.5)")
 fig, ax = plt.subplots(figsize=(15, 6))
-sns.lineplot(data=filtered_df, x="datetime", y="PM2.5", hue="station", ax=ax)
+
+# Pastikan menggunakan kolom 'date' bukan 'datetime'
+sns.lineplot(data=filtered_df, x="date", y="PM2.5", hue="station", ax=ax)
+
 plt.xticks(rotation=45)
 plt.xlabel("Waktu")
 plt.ylabel("Konsentrasi PM2.5 (µg/m³)")
