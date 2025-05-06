@@ -1,3 +1,5 @@
+from io import StringIO
+import requests
 import streamlit as st
 import pandas as pd
 import seaborn as sns
@@ -6,17 +8,27 @@ import matplotlib.pyplot as plt
 st.set_page_config(layout="wide")
 
 # Load data
-import os
-
-@st.cache_data
+@st.cache_data(ttl=600)
 def load_data():
-    base_path = os.path.dirname(dashboard)  # type: ignore # folder tempat dashboard.py berada
-    file_path = os.path.join(base_path, "cleaned_data.csv")
-    df = pd.read_csv(file_path)
-    df["datetime"] = pd.to_datetime(df[["year", "month", "day"]])
-    df["date"] = df["datetime"].dt.date
-    return df
-
+    url = "https://github.com/intanfalah/beijing_3station_airquality/blob/main/dashboard/cleaned_data.csv"
+    
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            csv_data = StringIO(response.text)
+            df = pd.read_csv(csv_data, parse_dates=[["year", "month", "day", "hour"]])
+            df.rename(columns={"year_month_day_hour": "datetime"}, inplace=True)
+    
+            # Konversi datetime ke tipe yang benar
+            df["datetime"] = pd.to_datetime(df["datetime"], format="%Y %m %d %H")
+            df["date"] = df["datetime"].dt.date  # Kolom date-only untuk filtering
+            return df
+        else:
+            st.error(f"Gagal mengunduh data, kode status: {response.status_code}")
+            return None
+    except Exception as e:
+        st.error(f"Terjadi kesalahan: {e}")
+        return None
 
 df = load_data()
 
