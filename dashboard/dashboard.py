@@ -21,8 +21,12 @@ def load_data():
 df = load_data()
 
 if df is not None:
-    stations = df["station"].unique()
-    st.write(stations)
+    # Memeriksa apakah kolom 'station' ada dalam DataFrame
+    if 'station' in df.columns:
+        stations = df["station"].unique()
+        st.write(stations)
+    else:
+        st.error("Kolom 'station' tidak ditemukan dalam data.")
 else:
     st.write("Data tidak dapat dimuat.")
 
