@@ -6,12 +6,17 @@ import matplotlib.pyplot as plt
 st.set_page_config(layout="wide")
 
 # Load data
+import os
+
 @st.cache_data
 def load_data():
-    df = pd.read_csv("./cleaned_data.csv")
-    df["datetime"] = pd.to_datetime(df[["year", "month", "day", "hour"]])
+    base_path = os.path.dirname(dashboard)  # type: ignore # folder tempat dashboard.py berada
+    file_path = os.path.join(base_path, "cleaned_data.csv")
+    df = pd.read_csv(file_path)
+    df["datetime"] = pd.to_datetime(df[["year", "month", "day"]])
     df["date"] = df["datetime"].dt.date
     return df
+
 
 df = load_data()
 
