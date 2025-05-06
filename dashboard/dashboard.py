@@ -43,15 +43,20 @@ st.sidebar.header("Filter Data")
 stations = df["station"].unique()
 selected_stations = st.sidebar.multiselect("Pilih Stasiun", stations, default=stations)
 
+# Ensure the date_range values are datetime objects
+start_date, end_date = date_range
+start_date = pd.to_datetime(start_date)
+end_date = pd.to_datetime(end_date)
+
 # Filter data
-filtered_df = df[(df["station"].isin(selected_stations)) &
-                 (df["date"] >= date_range[0]) & 
-                 (df["date"] <= date_range[1])]
+filtered_df = df[(df["station"].isin(selected_stations)) & 
+                 (df["date"] >= start_date) & 
+                 (df["date"] <= end_date)]
 
 # 1️⃣ Tren PM2.5
 st.subheader("📊 Tren Kualitas Udara per Stasiun (PM2.5)")
 fig, ax = plt.subplots(figsize=(15, 6))
-sns.lineplot(data=filtered_df, x="date", y="PM2.5", hue="station", ax=ax)
+sns.lineplot(data=filtered_df, x="datetime", y="PM2.5", hue="station", ax=ax)
 plt.xticks(rotation=45)
 plt.xlabel("Waktu")
 plt.ylabel("Konsentrasi PM2.5 (µg/m³)")
