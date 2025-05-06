@@ -10,7 +10,7 @@ st.set_page_config(layout="wide")
 # Load data
 @st.cache_data(ttl=600)
 def load_data():
-    url = "https://github.com/intanfalah/beijing_3station_airquality/blob/main/dashboard/cleaned_data.csv"
+    url = "https://raw.githubusercontent.com/intanfalah/beijing_3station_airquality/main/dashboard/cleaned_data.csv"
     
     try:
         response = requests.get(url)
