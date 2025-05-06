@@ -21,12 +21,16 @@ def load_data():
 df = load_data()
 
 if df is not None:
-    # Memeriksa apakah kolom 'station' ada dalam DataFrame
-    if 'station' in df.columns:
-        stations = df["station"].unique()
-        st.write(stations)
+    # Membuat kolom 'date' dari kolom 'year', 'month', dan 'day'
+    df["date"] = pd.to_datetime(df[['year', 'month', 'day']])
+    
+    # Memeriksa apakah kolom 'date' berhasil dibuat
+    if 'date' in df.columns:
+        # Memilih rentang waktu berdasarkan kolom 'date'
+        date_range = st.sidebar.date_input("Rentang Waktu", [df["date"].min(), df["date"].max()])
+        st.write(f"Rentang waktu yang dipilih: {date_range}")
     else:
-        st.error("Kolom 'station' tidak ditemukan dalam data.")
+        st.error("Kolom 'date' gagal dibuat.")
 else:
     st.write("Data tidak dapat dimuat.")
 
