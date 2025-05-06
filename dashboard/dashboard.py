@@ -26,8 +26,12 @@ if df is not None:
     
     # Memeriksa apakah kolom 'date' berhasil dibuat
     if 'date' in df.columns:
-        # Memilih rentang waktu berdasarkan kolom 'date'
-        date_range = st.sidebar.date_input("Rentang Waktu", [df["date"].min(), df["date"].max()])
+        # Membuat ID unik untuk widget date_input
+        date_range = st.sidebar.date_input(
+            "Rentang Waktu", 
+            value=[df["date"].min(), df["date"].max()],
+            key="unique_date_range"
+        )
         st.write(f"Rentang waktu yang dipilih: {date_range}")
     else:
         st.error("Kolom 'date' gagal dibuat.")
