@@ -10,27 +10,21 @@ st.set_page_config(layout="wide")
 # Load data
 @st.cache_data(ttl=600)
 def load_data():
-    url = "https://github.com/intanfalah/dashboard/raw/dashboard/cleaned_data.csv"
-    
+    url = "https://raw.githubusercontent.com/intanfalah/beijing_3station_airquality/main/dashboard/cleaned_data.csv"
     try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            csv_data = StringIO(response.text)
-            df = pd.read_csv(csv_data, parse_dates=[["year", "month", "day", "hour"]])
-            df.rename(columns={"year_month_day_hour": "datetime"}, inplace=True)
-    
-            # Konversi datetime ke tipe yang benar
-            df["datetime"] = pd.to_datetime(df["datetime"], format="%Y %m %d %H")
-            df["date"] = df["datetime"].dt.date  # Kolom date-only untuk filtering
-            return df
-        else:
-            st.error(f"Gagal mengunduh data, kode status: {response.status_code}")
-            return None
+        data = pd.read_csv(url)
+        return data
     except Exception as e:
-        st.error(f"Terjadi kesalahan: {e}")
+        st.error(f"Terjadi kesalahan saat mengunduh data: {e}")
         return None
 
 df = load_data()
+
+if df is not None:
+    stations = df["station"].unique()
+    st.write(stations)
+else:
+    st.write("Data tidak dapat dimuat.")
 
 # Sidebar filter
 st.sidebar.header("Filter Data")
