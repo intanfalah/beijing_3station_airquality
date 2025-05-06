@@ -21,4 +21,5 @@ Disarankan untuk menggunakan **virtual environment** untuk mengelola dependensi 
 2. **Install Library yang Dibutuhkan**:
    pip install -r requirements.txt
 3. **Menjalankan Dashboard**:
+   cd dashboard
    streamlit run dashboard.py
